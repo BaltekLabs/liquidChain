@@ -20,10 +20,6 @@ def home():
 def userLanding():
     return render_template('/userLanding.html')
 
-@app.route('/stockData')
-def stockData():
-    return render_template('/stockData.html')
-
 @app.route('/falseIdent')
 def falseIdent():
     return render_template('/homelandingNullLogin.html')
@@ -62,7 +58,15 @@ def stockQuote():
         stock_data = pd.read_csv('out.csv',error_bad_lines=False)
 
         
-    return render_template('/stockData.html', stock_data=stock_data)
+    return render_template('/stockData.html', stock_data=stock_data,stock_request=stock_request)
+
+
+@app.route('/stockData')
+def stockData():
+    
+    return render_template('/stockData.html')
+
+
 
 
 
