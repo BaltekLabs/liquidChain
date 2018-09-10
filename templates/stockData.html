@@ -7,17 +7,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="{{url_for('static',filename='css/base.css')}}" />
     <!--script src="main.js"></script-->
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body style="background-color: black">
     
     <div id="stock_data_show">
-        <h2 style="color: snow; text-align: center; padding-top:15%">{{ stock_request }}</h2>
+        <h2 style="color: snow; text-align: center; padding-top:15%">{{ stock_data }}</h2>
     </div>
     <div id="trade_buttons" style="padding-top:2%;text-align: center">
     <div id="buy_button" style="padding-left: 20%;width: 60%">
-        <button id="buy_button" type="button" class="buybutton">BUY</button>
-        <button id="sell_button" type="button" class="sellbutton">SELL</button>
+        <button id="buy_button" type="button" class="buybutton" data-toggle="modal" data-target="#buyModal">BUY</button>
+        <button id="sell_button" type="button" class="sellbutton" data-toggle="modal" data-target="#sellModal">SELL</button>
     </div>
+    
+<!-- Modal -->
+<div id="buyModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content" style="background-color: rgba(89, 165, 127, .95);">
+      <div class="modal-header">
+        <h4 class="modal-title">Place Buy Order</h4>
+    </div>
+        <form action="{{ url_for('buyEntered') }}" method="POST">
+            <h2>Order Size</h2>
+            <input name="order_size" type="text" style="color: rgba(89,165,127,.95)" class="user_form"><br><br>
+            <h2>Order Price</h2>
+            <input name="order_price" type="text" style="color: rgba(89,165,127,.95)" class="user_form"><br><br>
+            <h2>Order Type</h2>
+            <select name="order_type">
+                <option value="market">Market</option>
+                <option value="limit">Limit</option>
+                <option value="stop">Stop</option>
+                <option value="oco">OCO</option>
+            </select>
+            <br><br><br>
+            <button id="buy_button" class="button" type="submit" style="background-color:black; color:snow; border-radius: 9pt; width: 30%" data-toggle="modal" data-target="#buyModal">Send Order</button>
+        </form>
+        
+        
+        <br><br><br>
+    </div>
+
+  </div>
+</div>
+
+<div id="sellModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+  
+      <!-- Modal content-->
+      <div class="modal-content" style="background-color: rgba(226, 3, 3,.95);position: relative;">
+        <div class="modal-header">
+          <h4 class="modal-title" style="color:snow">Place Sell Order</h4>
+      </div>
+          <form  action="/sellEntered" method="POST">
+              <h2 style="color:snow">Order Size</h2>
+              <input name="order_size" type="text" class="user_form"><br><br>
+              <h2 style="color:snow">Order Type</h2>
+              <select name="order_type">
+                  <option value="market">Market</option>
+                  <option value="limit">Limit</option>
+                  <option value="stop">Stop</option>
+                  <option value="oco">OCO</option>
+                </select> 
+          </form>
+          <br>
+        
+      </div>
+  
+    </div>
+  </div>
+
+
+
 </body>
-</html>
+
 </html>

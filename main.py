@@ -1,8 +1,11 @@
-from flask import Flask, request, render_template, redirect, url_for
+from flask import Flask, request, render_template, redirect, url_for, session
 import requests
 import io
 import pandas as pd
 import csv
+from lightmatchingengine.lightmatchingengine import LightMatchingEngine, Side
+
+lme = LightMatchingEngine()
 
 app = Flask(__name__)
 
@@ -48,6 +51,8 @@ def stockQuote():
     if request.method == 'POST':
         stock_request = request.form['stock_search']
         r = requests.get('https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=%s&apikey='%stock_request + API_KEY)
+        session['stock_request'] = stock_request
+        session['stock_data'] = r.text
         with open('out.csv', 'w') as f:
             writer = csv.writer(f)
             reader = csv.reader(r.text)
@@ -63,9 +68,24 @@ def stockQuote():
 
 @app.route('/stockData')
 def stockData():
+    return
     
-    return render_template('/stockData.html')
 
+@app.route('/buyEntered', methods=['GET','POST'])
+def buyEntered():
+    if request.method == 'POST':
+        stock_request = session.get('stock_request',None)
+        stock_data = session.get('stock_data', None)
+        order_size = request.form['order_size']
+        order_price = request.form['order_price']
+       # order_type = request.form['order_type']
+       # order, trades = lme.add_order(stock_request, order_price, order_size, Side.BUY)
+        order = [stock_request, order_price, order_size, "buy"]
+        with open("order.txt","w") as fo:
+            fo.writelines(repr(order))
+
+        
+        return render_template('/stockData.html', stock_request= stock_request, stock_data = stock_data)
 
 
 
@@ -73,5 +93,9 @@ def stockData():
 #Functions
 
 if __name__ == "__main__":
+    app.secret_key = 'super secret key'
+    app.config['SESSION_TYPE'] = 'filesystem'
+
+   
     app.run(debug=True)
     
