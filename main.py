@@ -3,21 +3,21 @@ import requests
 import io
 import pandas as pd
 import csv
-from lightmatchingengine.lightmatchingengine import LightMatchingEngine, Side
+#from lightmatchingengine.lightmatchingengine import LightMatchingEngine, Side
 
-lme = LightMatchingEngine()
+#lme = LightMatchingEngine()
 
 app = Flask(__name__)
 
 # PAGE ROUTES
 
-@app.route("/")
-def index():
-    return render_template('/homeLanding.html')
+#@app.route("/")
+#def index():
+ #   return render_template('/homeLanding.html')
 
-@app.route('/homeLanding')
-def home():
-    return render_template('/homeLanding.html')
+#@app.route('/homeLanding')
+#def home():
+ #   return render_template('/homeLanding.html')
 
 @app.route('/userLanding')
 def userLanding():
@@ -27,7 +27,26 @@ def userLanding():
 def falseIdent():
     return render_template('/homelandingNullLogin.html')
 
+# LOGIN ROUTES
+@app.route('/')
+def home():
+    if not session.get('logged_in'):
+        return render_template('login.html')
+    else:
+        return "Hello Boss!"
+ 
+@app.route('/login', methods=['POST'])
+def do_admin_login():
+    if request.form['password'] == 'password' and request.form['username'] == 'admin':
+        session['logged_in'] = True
+    else:
+        flash('wrong password!')
+    return home()
 
+@app.route("/logout")
+def logout():
+    session['logged_in'] = False
+    return home()
 
 # FORM ROUTES
 
@@ -86,6 +105,7 @@ def buyEntered():
 
         
         return render_template('/stockData.html', stock_request= stock_request, stock_data = stock_data)
+
 
 
 
