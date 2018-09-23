@@ -1,11 +1,17 @@
+<!doctype html>
+<head>
 <link rel="stylesheet" href="/static/css/login.css" type="text/css">
+</head>
+<!--
 {% block body %}
 {% if session['logged_in'] %}
 <p>You're logged in already!</p>
 {% else %}
+-->
+<body style="height:100%; width:100%">
 <div style="position: fixed; z-index: -99; width: 100%; height: 100%">
 	<iframe frameborder="0" height="100%" width="100%" 
-	  src="https://youtu.be/GmcCBDToDtM">
+	  src="/static/images/test.mp4">
 	</iframe>
 </div>
  
@@ -33,6 +39,6 @@
 		</div>
 	</div>
 </form>
- 
+</body>
 {% endif %}
 {% endblock %}
